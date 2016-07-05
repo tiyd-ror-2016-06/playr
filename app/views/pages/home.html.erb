@@ -1,1 +1,14 @@
 <h1>Home!</h1>
+
+<%= form_tag start_game_path do %>
+  <select name="game" id="select_game">
+    <!--
+    <option value="hangman">Hangman</option>
+    <option value="battleship">Battleship</option>
+    -->
+    <% @games.each do |game| %>
+      <option value="<%= game.name.downcase %>"><%= game %></option>
+    <% end %>
+  </select>
+  <button>Play</button>
+<% end %>

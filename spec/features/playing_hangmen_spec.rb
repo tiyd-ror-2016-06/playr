@@ -34,7 +34,7 @@ feature "Playing hangman", type: :feature do
     log_in
 
     visit "/"
-    select "Hangman", from: "Games"
+    select "Hangman", from: "select_game"
     click_on "Play"
 
     # See board
