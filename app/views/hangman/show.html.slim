@@ -1,1 +1,9 @@
 h1 Play Hangman!
+
+pre.board= @game.board
+
+= form_tag games_hangman_path(@game), method: :patch do
+  input.form-control name="guess" type="text"
+  button.btn.btn-primary Guess
+
+strong #{@game.lives_left} lives left!

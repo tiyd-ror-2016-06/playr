@@ -31,6 +31,8 @@ feature "Playing hangman", type: :feature do
   end
 
   it "can play hangman" do
+    Hangman.word_list = ["aardwolf"]
+
     log_in
 
     visit "/"
@@ -40,8 +42,7 @@ feature "Playing hangman", type: :feature do
     expect(page).to have_content "New game created"
     expect(page).to have_content "Play Hangman!"
 
-    # Word is `aardwolf`
-
+    # Word is `aardwolf` ...
     expect(page).to have_content "6 lives left"
 
     fill_in "guess", with: "a"
@@ -52,6 +53,6 @@ feature "Playing hangman", type: :feature do
 
     fill_in "guess", with: "b"
     click_on "Guess"
-    expect(page).to have_content "6 lives left"
+    expect(page).to have_content "5 lives left"
   end
 end

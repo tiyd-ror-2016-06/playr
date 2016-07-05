@@ -9,10 +9,10 @@ class PagesController < ApplicationController
     #   "battleship" => Battleship
     # }[ params[:game] ]
     game_class = params[:game].capitalize.constantize
-    g = game_class.create!
+    g = game_class.start current_user
 
     path_helper = "games_#{params[:game]}_path"
-    final_path = send path_helper, 123
+    final_path = send path_helper, g
 
     redirect_to final_path, notice: "New game created!"
   end
