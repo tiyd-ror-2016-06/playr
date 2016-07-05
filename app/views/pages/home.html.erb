@@ -2,13 +2,10 @@
 
 <%= form_tag start_game_path do %>
   <select name="game" id="select_game">
-    <!--
-    <option value="hangman">Hangman</option>
-    <option value="battleship">Battleship</option>
-    -->
     <% @games.each do |game| %>
       <option value="<%= game.name.downcase %>"><%= game %></option>
     <% end %>
   </select>
+  <!-- <%= collection_select :game, :id, @games, :to_s, :to_s %> -->
   <button>Play</button>
 <% end %>

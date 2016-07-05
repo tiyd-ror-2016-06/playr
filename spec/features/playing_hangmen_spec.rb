@@ -37,12 +37,21 @@ feature "Playing hangman", type: :feature do
     select "Hangman", from: "select_game"
     click_on "Play"
 
-    # See board
-    save_and_open_page
-    binding.pry
+    expect(page).to have_content "New game created"
+    expect(page).to have_content "Play Hangman!"
 
-    # Type in a letter
-    # Click check guess
-    # See result ...
+    # Word is `aardwolf`
+
+    expect(page).to have_content "6 lives left"
+
+    fill_in "guess", with: "a"
+    click_on "Guess"
+
+    expect(page.find(".board")).to have_content "a a _ _"
+    expect(page).to have_content "6 lives left"
+
+    fill_in "guess", with: "b"
+    click_on "Guess"
+    expect(page).to have_content "6 lives left"
   end
 end
