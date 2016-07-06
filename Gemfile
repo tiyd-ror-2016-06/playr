@@ -19,6 +19,7 @@ gem 'twitter-bootstrap-rails'
 gem 'bootstrap_form'
 gem 'quiet_assets'
 gem 'slim-rails'
+gem 'figaro'
 
 group :development do
   gem 'spring'

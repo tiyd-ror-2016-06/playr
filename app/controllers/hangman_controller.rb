@@ -16,7 +16,12 @@ class HangmanController < ApplicationController
   end
 
   def slack
-    puts "~~~ User ID is #{params[:user_id]} ~~~"
+    unless params[:token] == ENV["SLACK_SLASH_TOKEN"]
+      render text: "No!", status: 401
+      return
+    end
+
+    Rails.logger.info "~~~ User ID is #{params[:user_id]} ~~~"
     user_from_slack = User.where(slack_id: params[:user_id]).first_or_create! do |u|
       u.email    = "#{params[:user_name]}+slack@example.com"
       u.password = SecureRandom.hex 32
