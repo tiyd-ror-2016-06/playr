@@ -23,10 +23,14 @@ class Hangman < ActiveRecord::Base
   def board
     word.split("").map do |l|
       guesses.include?(l) ? l : "_"
-    end.join " "
+    end
   end
 
   def letters_guessed
     guesses.split ""
+  end
+
+  def missed_guesses
+    letters_guessed - board
   end
 end

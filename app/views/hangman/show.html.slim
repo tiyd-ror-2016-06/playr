@@ -1,6 +1,6 @@
 h1 Play Hangman!
 
-pre.board= @game.board
+pre.board= @game.board.join(" ")
 
 = form_tag games_hangman_path(@game), method: :patch do
   input.form-control name="guess" type="text"
