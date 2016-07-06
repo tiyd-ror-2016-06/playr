@@ -247,10 +247,26 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
-  # config.warden do |manager|
-  #   manager.intercept_401 = false
-  #   manager.default_strategies(scope: :user).unshift :some_external_strategy
-  # end
+  class CustomStrategy < Devise::Strategies::Base
+    def valid?
+      request.env["HTTP_AUTHORIZATION"].present?
+    end
+
+    def authenticate!
+      email = request.env["HTTP_AUTHORIZATION"]
+      user  = User.find_by email: email
+      if user
+        success! user
+      else
+        fail! "No user matches that email"
+      end
+    end
+  end
+
+  config.warden do |manager|
+    manager.strategies.add(:auth_header, CustomStrategy)
+    manager.default_strategies(scope: :user).unshift :auth_header
+  end
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine

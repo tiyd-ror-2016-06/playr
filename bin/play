@@ -4,7 +4,8 @@ require 'pry'
 URL = "http://localhost:3000"
 
 def play_game id
-  game = HTTParty.get "#{URL}/games/hangman/#{id}.json"
+  game = HTTParty.get "#{URL}/games/hangman/#{id}.json",
+    headers: { "Authorization" => "jamesdabbs@gmail.com" }
 
   loop do
     puts game["board"].join " | "
@@ -24,7 +25,8 @@ def play_game id
 end
 
 def create_game
-  resp = HTTParty.post "#{URL}/start.json", body: { game: "hangman" }
+  resp = HTTParty.post "#{URL}/start.json", body: { game: "hangman" },
+    headers: { "Authorization" => "jamesdabbs@gmail.com" }
   resp["id"]
 end
 
