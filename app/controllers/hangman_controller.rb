@@ -16,9 +16,11 @@ class HangmanController < ApplicationController
   end
 
   def slack
+    puts "~~~ User ID is #{params[:user_id]} ~~~"
     user_from_slack = User.where(slack_id: params[:user_id]).first_or_create! do |u|
       u.email    = "#{params[:user_name]}+slack@example.com"
       u.password = SecureRandom.hex 32
+      u.slack_id = params[:user_id]
     end
 
     if params[:text] == "start"
