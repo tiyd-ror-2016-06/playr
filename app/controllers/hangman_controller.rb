@@ -16,27 +16,15 @@ class HangmanController < ApplicationController
   end
 
   def slack
-    unless params[:token] == ENV["SLACK_SLASH_TOKEN"]
-      render text: "No!", status: 401
-      return
-    end
-
-    Rails.logger.info "~~~ User ID is #{params[:user_id]} ~~~"
-    user_from_slack = User.where(slack_id: params[:user_id]).first_or_create! do |u|
-      u.email    = "#{params[:user_name]}+slack@example.com"
-      u.password = SecureRandom.hex 32
-      u.slack_id = params[:user_id]
-    end
-
-    if params[:text] == "start"
-      game = Hangman.start user_from_slack
+    handler = SlackCommandHandler.new(
+      slack_id:   params[:user_id],
+      slack_name: params[:user_name],
+      message:    params[:text]
+    )
+    if handler.allowed? params[:token]
+      render text: handler.response
     else
-      letter = params[:text]
-      game   = Hangman.where(player: user_from_slack).last
-      game.record_guess letter
+      render text: "No!", status: 401
     end
-
-    board = game.board.join(" ")
-    render text: "`#{board}`"
   end
 end
