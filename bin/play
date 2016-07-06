@@ -1,34 +1,56 @@
 require 'httparty'
 require 'pry'
 
-URL = "http://localhost:3000"
+class MyApi
+  include HTTParty
+  base_uri "http://localhost:3000"
 
-def play_game id
-  game = HTTParty.get "#{URL}/games/hangman/#{id}.json",
-    headers: { "Authorization" => "jamesdabbs@gmail.com" }
+  def initialize email
+    @email = email
+  end
 
-  loop do
-    puts game["board"].join " | "
-    puts "Lives left: #{game['lives_left']}"
-    puts "Missed: #{game['missed_guesses'].join ', '}"
+  def play_game id
+    game = MyApi.get "/games/hangman/#{id}", headers: headers
 
-    print "Your move > "
-    letter = gets.chomp
+    loop do
+      puts game["board"].join " | "
+      puts "Lives left: #{game['lives_left']}"
+      puts "Missed: #{game['missed_guesses'].join ', '}"
 
-    game = HTTParty.patch "#{URL}/games/hangman/#{id}.json",
-      body: { guess: letter }
+      print "Your move > "
+      letter = gets.chomp
 
-    if game['lives_left'] == 0 || !game['board'].include?("_")
-      break
+      game = MyApi.patch "/games/hangman/#{id}",
+        body: { guess: letter },
+        headers: headers
+
+      if game['lives_left'] == 0 || !game['board'].include?("_")
+        break
+      end
     end
+  end
+
+  def create_game
+    resp = MyApi.post "/start",
+      body: { game: "hangman" },
+      headers: headers
+    resp["id"]
+  end
+
+  private
+
+  def headers
+    {
+      "Authorization" => @email,
+      "Accept"        => "application/json"
+    }
   end
 end
 
-def create_game
-  resp = HTTParty.post "#{URL}/start.json", body: { game: "hangman" },
-    headers: { "Authorization" => "jamesdabbs@gmail.com" }
-  resp["id"]
-end
 
-id = create_game
-play_game id
+print "What's your email? > "
+email = gets.chomp
+
+api = MyApi.new email
+id = api.create_game
+api.play_game id
