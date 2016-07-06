@@ -17,11 +17,16 @@ def play_game id
     game = HTTParty.patch "#{URL}/games/hangman/#{id}.json",
       body: { guess: letter }
 
-    break if game['lives_left'] == 0
+    if game['lives_left'] == 0 || !game['board'].include?("_")
+      break
+    end
   end
 end
 
-play_game 4
+def create_game
+  resp = HTTParty.post "#{URL}/start.json", body: { game: "hangman" }
+  resp["id"]
+end
 
-binding.pry
-puts
+id = create_game
+play_game id

@@ -14,6 +14,9 @@ class PagesController < ApplicationController
     path_helper = "games_#{params[:game]}_path"
     final_path = send path_helper, g
 
-    redirect_to final_path, notice: "New game created!"
+    respond_to do |f|
+      f.html { redirect_to final_path, notice: "New game created!" }
+      f.json { render json: { id: g.id } }
+    end
   end
 end
