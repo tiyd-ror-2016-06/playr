@@ -4,7 +4,7 @@ class Hangman < ActiveRecord::Base
   @word_list = ["test", "example", "thing"]
 
   def self.start user
-    word = @word_list.sample
+    word = @word_list ? @word_list.sample : Word.all.sample
     create! word: word, lives_left: 6, player: user
   end
 
