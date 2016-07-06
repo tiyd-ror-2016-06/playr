@@ -1,7 +1,7 @@
 class SlackCommandHandler
   def initialize slack_id:, slack_name:, message:
     @slack_id, @slack_name, @message =
-      slack_id, slack_name, message
+      slack_id, slack_name, message.strip
   end
 
   def allowed? given_token
@@ -11,6 +11,16 @@ class SlackCommandHandler
   def response
     if @message == "start"
       game = Hangman.start user
+    elsif @message == "show"
+      game = Hangman.where(player: user).last
+    elsif @message.start_with? "solve"
+      solution = @message.split(" ").last
+      game = Hangman.where(player: user).last
+      if game.word == solution
+        return "You got it!"
+      else
+        return "Nope, that wasn't it"
+      end
     else
       game = Hangman.where(player: user).last
       game.record_guess @message
