@@ -4,8 +4,12 @@ class HangmanController < ApplicationController
   end
 
   def update
-    g = Hangman.where(player: current_user).find params[:id]
-    g.record_guess params[:guess]
-    redirect_to :back
+    @game = Hangman.where(player: current_user).find params[:id]
+    @game.record_guess params[:guess]
+
+    respond_to do |f|
+      f.html { redirect_to :back }
+      f.json { render :show }
+    end
   end
 end

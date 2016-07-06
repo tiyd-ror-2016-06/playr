@@ -1,0 +1,27 @@
+require 'httparty'
+require 'pry'
+
+URL = "http://localhost:3000"
+
+def play_game id
+  game = HTTParty.get "#{URL}/games/hangman/#{id}.json"
+
+  loop do
+    puts game["board"].join " | "
+    puts "Lives left: #{game['lives_left']}"
+    puts "Missed: #{game['missed_guesses'].join ', '}"
+
+    print "Your move > "
+    letter = gets.chomp
+
+    game = HTTParty.patch "#{URL}/games/hangman/#{id}.json",
+      body: { guess: letter }
+
+    break if game['lives_left'] == 0
+  end
+end
+
+play_game 4
+
+binding.pry
+puts
