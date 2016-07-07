@@ -26,7 +26,6 @@ gem 'sinatra', require: false
 
 group :development do
   gem 'spring'
-  gem 'capybara'
 end
 
 group :development, :test do
@@ -39,4 +38,5 @@ end
 
 group :test do
   gem 'simplecov'
+  gem 'capybara'
 end
