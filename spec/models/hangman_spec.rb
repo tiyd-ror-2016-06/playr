@@ -8,7 +8,7 @@ describe Hangman, type: :model do
 
     expect(g.lives_left).to eq 6
     expect(g.guesses).to include "z"
-    expect(g.board).to eq "_ _ z z"
+    expect(g.board).to eq %w(_ _ z z)
   end
 
   it "can record bad guesses" do
@@ -18,7 +18,7 @@ describe Hangman, type: :model do
 
     expect(g.lives_left).to eq 5
     expect(g.guesses).to include "b"
-    expect(g.board).to eq "_ _ _ _"
+    expect(g.board).to eq %w(_ _ _ _)
   end
 
   it "can record multiple guesses" do
