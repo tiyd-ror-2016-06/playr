@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   devise_for :users
 
@@ -6,6 +8,12 @@ Rails.application.routes.draw do
 
   resource :games, only: [] do
     resources :hangman, except: [:destroy]
+  end
+
+  get "/wat" => "pages#wat"
+
+  authenticate :user, ->(u) { true || u.admin? } do
+    mount Sidekiq::Web => "/jobs"
   end
 
   root to: "pages#home"

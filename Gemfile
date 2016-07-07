@@ -21,6 +21,9 @@ gem 'quiet_assets'
 gem 'slim-rails'
 gem 'figaro'
 
+gem 'sidekiq'
+gem 'sinatra', require: false
+
 group :development do
   gem 'spring'
   gem 'capybara'

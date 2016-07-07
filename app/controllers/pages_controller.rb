@@ -19,4 +19,13 @@ class PagesController < ApplicationController
       f.json { render json: { id: g.id } }
     end
   end
+
+  def wat
+    params[:count].to_i.times do
+      voice = `say -v '?' | grep en_`.split("\n").sample.split.first
+      word  = params[:word] || Word.offset(rand 1 .. Word.count).first.word
+      CreepyJob.perform_later voice, word
+    end
+    render text: "Okay ..."
+  end
 end
